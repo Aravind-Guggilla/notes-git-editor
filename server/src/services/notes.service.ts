@@ -2,7 +2,7 @@ import { promises as fs } from "node:fs";
 
 import { NOTE_INDEX_FILE } from "../config/paths.js";
 
-import { NoteIndexEntry } from "../types/note.types.js";
+import { NoteIndexEntry, NoteTreeNode } from "../types/note.types.js";
 
 //Reads the .noteindex.json file and returns all note entries.
  
@@ -30,3 +30,57 @@ export async function readNoteIndex(): Promise<NoteIndexEntry[]> {
 //     // Return the array
 //     return notes;
 // }
+
+export function buildFolderTree(notes: NoteIndexEntry[]): NoteTreeNode[] {
+  const tree: NoteTreeNode[] = []
+
+  for (const entry of notes) {
+    const segments = entry.path.split('/').slice(1)
+
+    let currentLevel = tree
+
+    for (let index = 0; index < segments.length; index++) {
+      const segment = segments[index]
+
+      const isLastSegment = index === segments.length - 1
+
+      if (isLastSegment) {
+        const fileNode: NoteTreeNode = {
+          name: segment,
+          title: entry.title,
+          path: entry.path,
+          type: 'file',
+        }
+
+        currentLevel.push(fileNode)
+      } else {
+        const existingFolder = currentLevel.find(node => node.name === segment && node.type === 'folder')
+
+        if (existingFolder) {
+          currentLevel = existingFolder.children!
+        } else {
+          const newFolder: NoteTreeNode = {
+            name: segment,
+            path: segments.slice(0, index + 1).join('/'),
+            type: 'folder',
+            children: [],
+          }
+
+          currentLevel.push(newFolder)
+
+          currentLevel = newFolder.children!
+        }
+      }
+    }
+  }
+
+  return tree
+}
+
+export async function getNotesTree(): Promise<NoteTreeNode[]> {
+  const notes = await readNoteIndex();
+
+  const tree = buildFolderTree(notes);
+
+  return tree;
+}

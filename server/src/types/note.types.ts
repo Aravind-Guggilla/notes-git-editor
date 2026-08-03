@@ -13,5 +13,6 @@ export interface NoteTreeNode {
   name: string;
   path: string;
   type: "file" | "folder";
+  title?: string;
   children?: NoteTreeNode[];
 }
