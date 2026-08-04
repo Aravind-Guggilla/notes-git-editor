@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import { readNoteIndex, getNotesTree, getNoteContent, saveNote } from "../services/notes.service.js";
-import type { SaveNoteRequest } from "../types/note.types.js";
+import { readNoteIndex, getNotesTree, getNoteContent, saveNote, createNote } from "../services/notes.service.js";
+import type { SaveNoteRequest, CreateNoteRequest } from "../types/note.types.js";
 
 export async function getNotes(request: Request, response: Response): Promise<void> {
   try {
@@ -77,5 +77,19 @@ export async function updateNoteController(request: Request, response: Response)
       success: false,
       message: 'Failed to save note.',
     })
+  }
+}
+
+export async function createNewNoteController(request: Request, response: Response,): Promise<void> {
+  try {
+    const note = request.body as CreateNoteRequest
+
+    await createNote(note)
+
+    response.status(201).json({success: true, message: 'Note created successfully.'})
+  } catch (error) {
+    console.error(error)
+
+    response.status(500).json({success: false, message: 'Failed to create note.'})
   }
 }

@@ -30,3 +30,12 @@ export interface SaveNoteRequest {
   path: string;
   content: string;
 }
+
+
+// Request payload for creating a note.
+ 
+export interface CreateNoteRequest {
+  path: string;
+  title: string;
+  content: string;
+}

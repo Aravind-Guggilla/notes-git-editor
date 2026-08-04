@@ -19,3 +19,14 @@ Content-Type: application/json
   "path": "notes/work/todo.md",
   "content": "# Work Todo\n\n- [x] Learn TypeScript\n- [ ] Finish Interview Project"
 }
+
+###
+//POST creating a new note
+POST http://localhost:5000/api/create-new-note
+Content-Type: application/json
+
+{
+  "path": "notes/work/meetings/sprint-15.md",
+  "title": "Sprint 15 Planning",
+  "content": "# Sprint 15 Planning\n\n- [ ] Prepare agenda\n"
+}

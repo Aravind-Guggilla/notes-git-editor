@@ -4,7 +4,7 @@ import path from "node:path";
 
 import { NOTE_INDEX_FILE } from "../config/paths.js";
 
-import { NoteIndexEntry, NoteTreeNode, NoteContent, SaveNoteRequest,} from "../types/note.types.js";
+import { NoteIndexEntry, NoteTreeNode, NoteContent, SaveNoteRequest, CreateNoteRequest} from "../types/note.types.js";
 
 import { resolveNotePath } from "../utils/path.utils.js";
 
@@ -22,6 +22,41 @@ export async function readNoteIndex(): Promise<NoteIndexEntry[]> {
 
   return notes;
 }
+
+// Writes the note index back to .noteindex.json
+export async function writeNoteIndex(notes: NoteIndexEntry[]): Promise<void> {
+  const fileContent = JSON.stringify(notes, null, 2)
+
+  await fs.writeFile(NOTE_INDEX_FILE, fileContent, 'utf-8')
+}
+
+
+export async function createNote(note: CreateNoteRequest): Promise<void> {
+  const absolutePath = resolveNotePath(note.path)
+
+  try {
+    await fs.access(absolutePath)
+
+    throw new Error('Note already exists.')
+  } catch (error) {
+    if (!(error instanceof Error) || error.message === "Note already exists.") {
+    throw error;
+  }
+  }
+
+  await fs.writeFile(absolutePath, note.content, 'utf-8')
+
+  const notes = await readNoteIndex()
+
+  notes.push({ path: note.path, title: note.title, })
+
+  notes.sort((a, b) => a.path.localeCompare(b.path)); // Sort the notes by path to maintain a consistent order
+
+  await writeNoteIndex(notes)
+
+  await commitChanges([note.path, '.noteindex.json'], `Create ${note.path}`)
+}
+
 
 // export async function readNoteIndex() {
 //     // Read the JSON file as text
