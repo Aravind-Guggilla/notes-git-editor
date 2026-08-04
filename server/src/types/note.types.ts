@@ -23,3 +23,10 @@ export interface NoteContent {
   path: string;
   content: string;
 }
+
+// Request payload for saving a note.
+
+export interface SaveNoteRequest {
+  path: string;
+  content: string;
+}

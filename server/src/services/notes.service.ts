@@ -4,9 +4,11 @@ import path from "node:path";
 
 import { NOTE_INDEX_FILE } from "../config/paths.js";
 
-import { NoteIndexEntry, NoteTreeNode, NoteContent } from "../types/note.types.js";
+import { NoteIndexEntry, NoteTreeNode, NoteContent, SaveNoteRequest,} from "../types/note.types.js";
 
 import { resolveNotePath } from "../utils/path.utils.js";
+
+import { commitChanges } from "./git.service.js";
 
 //Reads the .noteindex.json file and returns all note entries.
  
@@ -100,4 +102,14 @@ export async function getNoteContent(notePath: string): Promise<NoteContent> {
     path: notePath,
     content,
   }
+}
+
+// Saves a note and creates a Git commit.
+ 
+export async function saveNote(note: SaveNoteRequest): Promise<void> {
+  const absolutePath = resolveNotePath(note.path)
+
+  await fs.writeFile(absolutePath, note.content, 'utf-8')
+
+  await commitChanges([note.path], `Update ${note.path}`)
 }

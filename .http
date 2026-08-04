@@ -9,3 +9,13 @@ GET http://localhost:5000/api/tree
 ###
 //GET notes-content
 GET http://localhost:5000/api/notes/content?path=notes/work/todo.md
+
+###
+//PUT writing the or updating notes-content
+PUT http://localhost:5000/api/content
+Content-Type: application/json
+
+{
+  "path": "notes/work/todo.md",
+  "content": "# Work Todo\n\n- [x] Learn TypeScript\n- [ ] Finish Interview Project"
+}
