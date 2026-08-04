@@ -1,9 +1,10 @@
 import { Router } from "express";
-import { getNotes, getNotesTreeController} from "../controllers/notes.controller.js";
+import { getNotes, getNotesTreeController, getNoteController} from "../controllers/notes.controller.js";
 
 const router = Router();
 
 router.get("/notes", getNotes);
-router.get("/notes/tree", getNotesTreeController);
+router.get("/tree", getNotesTreeController);
+router.get("/notes/content", getNoteController);
 
 export default router;

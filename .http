@@ -1,3 +1,11 @@
 ###
 //GET notes
 GET http://localhost:5000/api/notes
+
+###
+//GET notes
+GET http://localhost:5000/api/tree
+
+###
+//GET notes-content
+GET http://localhost:5000/api/notes/content?path=notes/work/todo.md

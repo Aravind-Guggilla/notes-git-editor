@@ -16,3 +16,10 @@ export interface NoteTreeNode {
   title?: string;
   children?: NoteTreeNode[];
 }
+
+//Represents the contents of a note
+
+export interface NoteContent {
+  path: string;
+  content: string;
+}

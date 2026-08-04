@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { readNoteIndex, getNotesTree } from "../services/notes.service.js";
+import { readNoteIndex, getNotesTree, getNoteContent } from "../services/notes.service.js";
 
 export async function getNotes(request: Request, response: Response): Promise<void> {
   try {
@@ -36,5 +36,25 @@ export async function getNotesTreeController(request: Request, response: Respons
       success: false,
       message: "Failed to build notes tree.",
     });
+  }
+}
+
+export async function getNoteController(request: Request, response: Response): Promise<void> {
+  try {
+    const notePath = request.query.path as string
+
+    const note = await getNoteContent(notePath)
+
+    response.status(200).json({
+      success: true,
+      data: note,
+    })
+  } catch (error) {
+    console.error(error)
+
+    response.status(500).json({
+      success: false,
+      message: 'Failed to read note.',
+    })
   }
 }

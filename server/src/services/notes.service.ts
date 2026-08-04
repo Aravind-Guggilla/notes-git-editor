@@ -1,8 +1,10 @@
 import { promises as fs } from "node:fs";
 
-import { NOTE_INDEX_FILE } from "../config/paths.js";
+import path from "node:path";
 
-import { NoteIndexEntry, NoteTreeNode } from "../types/note.types.js";
+import { NOTE_INDEX_FILE, NOTES_REPOSITORY_PATH } from "../config/paths.js";
+
+import { NoteIndexEntry, NoteTreeNode, NoteContent } from "../types/note.types.js";
 
 //Reads the .noteindex.json file and returns all note entries.
  
@@ -83,4 +85,17 @@ export async function getNotesTree(): Promise<NoteTreeNode[]> {
   const tree = buildFolderTree(notes);
 
   return tree;
+}
+
+// Reads a single note from the notes-interview repository
+
+export async function getNoteContent(notePath: string): Promise<NoteContent> {
+  const absolutePath = path.join(NOTES_REPOSITORY_PATH, notePath) // Construct the absolute path to the note file
+
+  const content = await fs.readFile(absolutePath, 'utf-8')
+
+  return {
+    path: notePath,
+    content,
+  }
 }
