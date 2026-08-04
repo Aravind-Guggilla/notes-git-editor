@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { readNoteIndex, getNotesTree, getNoteContent, saveNote, createNote } from "../services/notes.service.js";
 import type { SaveNoteRequest, CreateNoteRequest } from "../types/note.types.js";
+import {findLinkedNotes} from '../services/link.service.js'
 
 export async function getNotes(request: Request, response: Response): Promise<void> {
   try {
@@ -91,5 +92,26 @@ export async function createNewNoteController(request: Request, response: Respon
     console.error(error)
 
     response.status(500).json({success: false, message: 'Failed to create note.'})
+  }
+}
+
+
+
+export async function getLinkedNotesController(request: Request, response: Response ): Promise<void> {
+  try {
+    const path = request.query.path as string
+
+    const references = await findLinkedNotes(path)
+
+    response.status(200).json({
+      success: true,
+      hasLinks: references.length > 0,
+      count: references.length,
+      references,
+    })
+  } catch (error) {
+    console.error(error)
+
+    response.status(500).json({ success: false, message: 'Failed to check links.'})
   }
 }

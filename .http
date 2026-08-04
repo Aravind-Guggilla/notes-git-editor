@@ -30,3 +30,7 @@ Content-Type: application/json
   "title": "Sprint 15 Planning",
   "content": "# Sprint 15 Planning\n\n- [ ] Prepare agenda\n"
 }
+
+###
+//GET linked notes
+GET http://localhost:5000/api/notes/links?path=notes/work/todo.md
