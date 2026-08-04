@@ -1,6 +1,6 @@
 import path from "node:path";
 
-//Absolute path to the notes repository.
+//Absolute path to the notes-interview repository.
 
 export const NOTES_REPOSITORY_PATH = path.resolve(
   process.cwd(),
