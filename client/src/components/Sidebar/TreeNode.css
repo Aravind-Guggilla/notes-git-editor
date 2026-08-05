@@ -1,0 +1,17 @@
+.tree-node {
+  padding: 6px 8px;
+
+  display: flex;
+  align-items: center;
+
+  cursor: pointer;
+  user-select: none;
+
+  border-radius: 4px;
+
+  transition: background-color 0.2s;
+}
+
+.tree-node:hover {
+  background-color: #e9ecef;
+}

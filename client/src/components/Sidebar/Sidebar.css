@@ -1,0 +1,11 @@
+.sidebar {
+  width: 320px;
+
+  padding: 15px;
+
+  border-right: 1px solid #dcdcdc;
+  background-color: #fafafa;
+
+  overflow-y: auto;
+  overflow-x: hidden;
+}
